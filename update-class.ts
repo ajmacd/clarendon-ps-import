@@ -1,9 +1,11 @@
 import parse from "csv-parse/lib/sync";
 import stringify from "csv-stringify/lib/sync";
 import { readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 import ss from "string-similarity";
-import { zip, uniq, flatten, partition, reduce } from "lodash";
+import { zip, flatten, partition } from "lodash";
 import glob from "glob";
+import mkdirp from "mkdirp";
 
 type ParentSquareCSVStudent = {
   Grade: string;
@@ -35,10 +37,15 @@ const gradeToOrdinalMap: { [k: string]: string } = {
   "5": "5th",
 };
 
-const psCSVFile = "data/input/ps_students_parents.csv";
-const clarendonCSVDir = "data/input/clarendon";
-const badMatchFile = "data/output/bad-matches.json";
-const outputCSVFile = "data/output/new_ps_students_parents.csv";
+const dataDir = "data";
+const inputDataDir = join(dataDir, "input");
+const outputDataDir = join(dataDir, "output");
+mkdirp.sync(outputDataDir);
+
+const psCSVFile = join(inputDataDir, "ps_students_parents.csv");
+const clarendonCSVDir = join(inputDataDir, "clarendon");
+const badMatchFile = join(outputDataDir, "bad-matches.json");
+const outputCSVFile = join(outputDataDir, "new_ps_students_parents.csv");
 
 const parseOptions = {
   columns: true,
